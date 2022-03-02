@@ -1,0 +1,21 @@
+[source.crates-io]
+registry = "https://github.com/rust-lang/crates.io-index"
+replace-with = 'ustc'
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+[build]
+#target = "riscv64gc-unknown-none-elf"
+target = "x86_64-sopeos.json"
+#rustflags = ['-Clink-arg=-Tsrc/lds/virt.lds']
+
+#[target.riscv64gc-unknown-none-elf]
+#linker = "riscv64-unknown-linux-gnu-gcc"
+
+[unstable]
+build-std = ["core", "compiler_builtins"]
+# 内存分配相关操作包含在此标准库中
+build-std-features = ["compiler-builtins-mem"]
+
+[target.'cfg(target_os = "none")']
+runner = "bootimage runner"
