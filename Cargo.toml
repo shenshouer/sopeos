@@ -1,0 +1,38 @@
+[package]
+edition = "2021"
+name = "sopeos"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bootloader = "0.9" # 0.10 版本支持uefi模式
+pc-keyboard = "^0.5" # 键盘映射
+pic8259 = "0.10.1" # 主控制器实现
+spin = "0.9" # 自旋锁。延迟初始化实例时，需要实体实现Sync，此处为非标准操作系统没有std实现，利用第三方包
+uart_16550 = "0.2" # QEMU单元测试退出前将测试结果以串口的形式发送到当前宿主机的标准输出
+volatile = "0.2" # VGA输出时只会写入到指定地址的缓存区域，没有读取操作，rust编译器可能会将此处优化。此包防止被优化
+x86_64 = "0.14" #  QEMU端口通讯
+
+[dependencies.lazy_static]
+features = ["spin_no_std"]
+version = "1.4"
+
+[profile.dev]
+# panic = "abort"
+
+[profile.release]
+# panic = "abort"
+
+[package.metadata.bootimage]
+test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio", "-display", "none"] 
+test-success-exit-code = 33 # (0x10 << 1) | 1
+test-timeout = 300 # (in seconds)
+
+[[test]]
+harness = false
+name = "should_panic"
+
+[[test]]
+harness = false
+name = "stack_overflow"
