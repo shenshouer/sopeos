@@ -6,7 +6,7 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bootloader = "0.9" # 0.10 版本支持uefi模式
+bootloader = {version = "0.9", features = ["map_physical_memory"]}# 0.10 版本支持uefi模式 
 pc-keyboard = "^0.5" # 键盘映射
 pic8259 = "0.10.1" # 主控制器实现
 spin = "0.9" # 自旋锁。延迟初始化实例时，需要实体实现Sync，此处为非标准操作系统没有std实现，利用第三方包
